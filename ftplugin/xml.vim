@@ -1200,7 +1200,7 @@ function! s:mapKey(mode, key, cmd)
     execute a:mode . "noremap <silent> <buffer> " .
           \ a:key . " " .
           \ a:cmd
-  else
+  elsif exists("g:xml_warn_on_duplicate_mapping")
     let s:duplicate_mappings += [[a:mode, a:key]]
   endif
 endfunction
@@ -1448,7 +1448,7 @@ call <SID>mapKey('n', '][', "m':call <SID>findCloseTag('W')<CR>")
 call <SID>mapKey('n', ']"', substitute(':call search("^\(\s*<!--.*\n\)\@<!\(\s*-->\)", "W")<CR>', '"', "'", 'g'))
 call <SID>mapKey('n', '["', substitute(':call search("\%(^\s*<!--.*\n\)\%(^\s*-->\)\@!", "bW")<CR>', '"', "'", 'g'))
 
-if len(s:duplicate_mappings) > 0
+if exists("g:xml_warn_on_duplicate_mapping") && len(s:duplicate_mappings) > 0
   let msg = ''
   let idx = 0
   redraw
@@ -1531,6 +1531,11 @@ xml_tag_completion_map
 	you wanted Control-L to perform auto completion inmstead of typing a
 	`>' place the following into your .vimrc: >
             let xml_tag_completion_map = "<C-l>"
+<
+xml_warn_on_duplicate_mapping
+	If a key mapping already exists, it won't be overwritted and functionality
+	just unavailable. Set this option will generate a warning for it: >
+            let g:xml_warn_on_duplicate_mapping = 1
 <
 xml_no_auto_nesting (Not Working!!!!!)
 	This turns off the auto nesting feature. After a completion is made
