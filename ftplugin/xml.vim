@@ -1200,7 +1200,7 @@ function! s:mapKey(mode, key, cmd)
     execute a:mode . "noremap <silent> <buffer> " .
           \ a:key . " " .
           \ a:cmd
-  elsif exists("g:xml_warn_on_duplicate_mapping")
+  elseif exists("g:xml_warn_on_duplicate_mapping")
     let s:duplicate_mappings += [[a:mode, a:key]]
   endif
 endfunction
