@@ -1201,6 +1201,7 @@ function! s:mapKey(mode, key, cmd)
           \ a:key . " " .
           \ a:cmd
   elseif exists("g:xml_warn_on_duplicate_mapping")
+        \ && g:xml_warn_on_duplicate_mapping
     let s:duplicate_mappings += [[a:mode, a:key]]
   endif
 endfunction
@@ -1448,7 +1449,9 @@ call <SID>mapKey('n', '][', "m':call <SID>findCloseTag('W')<CR>")
 call <SID>mapKey('n', ']"', substitute(':call search("^\(\s*<!--.*\n\)\@<!\(\s*-->\)", "W")<CR>', '"', "'", 'g'))
 call <SID>mapKey('n', '["', substitute(':call search("\%(^\s*<!--.*\n\)\%(^\s*-->\)\@!", "bW")<CR>', '"', "'", 'g'))
 
-if exists("g:xml_warn_on_duplicate_mapping") && len(s:duplicate_mappings) > 0
+if exists("g:xml_warn_on_duplicate_mapping")
+      \ && g:xml_warn_on_duplicate_mapping
+      \ && len(s:duplicate_mappings) > 0
   let msg = ''
   let idx = 0
   redraw
@@ -1533,8 +1536,10 @@ xml_tag_completion_map
             let xml_tag_completion_map = "<C-l>"
 <
 xml_warn_on_duplicate_mapping
-	If a key mapping already exists, it won't be overwritted and functionality
-	just unavailable. Set this option will generate a warning for it: >
+gits
+	If a key mapping already exists, xml.vim won't overwrite it (thus the
+	functionality just unavailable). Set this option to 1 will display a
+	warning when it happens: >
             let g:xml_warn_on_duplicate_mapping = 1
 <
 xml_no_auto_nesting (Not Working!!!!!)
