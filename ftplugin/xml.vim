@@ -1194,15 +1194,19 @@ en
 
 
 " mapKey()                         {{{1
-let s:duplicate_mappings = []
-function! s:mapKey(mode, key, cmd)	
+function! s:mapKey(mode, key, cmd)
   if maparg(a:key, a:mode) == ''
     execute a:mode . "noremap <silent> <buffer> " .
           \ a:key . " " .
           \ a:cmd
   elseif exists("g:xml_warn_on_duplicate_mapping")
         \ && g:xml_warn_on_duplicate_mapping
-    let s:duplicate_mappings += [[a:mode, a:key]]
+
+    redraw
+    let s:duplicate_mapping_msg = 'Mapping already exists: ' .
+          \ a:key .
+          \ " in mode " . a:mode
+    echohl WarningMsg | echomsg s:duplicate_mapping_msg | echohl None
   endif
 endfunction
 
@@ -1448,21 +1452,6 @@ call <SID>mapKey('n', '][', "m':call <SID>findCloseTag('W')<CR>")
 " Move around comments
 call <SID>mapKey('n', ']"', substitute(':call search("^\(\s*<!--.*\n\)\@<!\(\s*-->\)", "W")<CR>', '"', "'", 'g'))
 call <SID>mapKey('n', '["', substitute(':call search("\%(^\s*<!--.*\n\)\%(^\s*-->\)\@!", "bW")<CR>', '"', "'", 'g'))
-
-if exists("g:xml_warn_on_duplicate_mapping")
-      \ && g:xml_warn_on_duplicate_mapping
-      \ && len(s:duplicate_mappings) > 0
-  let msg = ''
-  let idx = 0
-  redraw
-  while idx < len(s:duplicate_mappings)
-    let msg .= 'Mapping already exists: ' .
-          \ s:duplicate_mappings[idx][1] .
-          \ " in mode " . s:duplicate_mappings[idx][0] . "\n"
-    let idx += 1
-  endwhile
-  echohl WarningMsg | echo msg | echohl None
-endif
 
 setlocal iskeyword=@,48-57,_,192-255,58  
 exe 'inoremap <silent> <buffer> '.b:suffix. " ><Esc>db:call <SID>makeElement()<Cr>"
