@@ -32,6 +32,7 @@ endif
 let b:did_ftplugin = 1
 
 setlocal commentstring=<!--%s-->
+setlocal iskeyword=@,48-57,_,192-255,58  
 
 " XML:  thanks to Johannes Zellner and Akbar Ibrahim
 " - case sensitive
@@ -1421,67 +1422,69 @@ if (s:install_status == 1)
 endif
 
 
-" Mappings of keys to functions                                      {{{1
+" Mappings                                                                {{{1
 if ! exists("s:mapped_keys")
   let s:mapped_keys = []
 endif
 
 call s:unmapKeys()
 
-call <SID>mapKey('n', '<LocalLeader>5', ':call <SID>Matches()<Cr>')
-call <SID>mapKey('v', '<LocalLeader>5', '<Esc>:call <SID>MatchesVisual()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>%', ':call <SID>Matches()<Cr>')
-call <SID>mapKey('v', '<LocalLeader>%', '<Esc>:call <SID>MatchesVisual()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>c', ':call <SID>Change()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>C', ':call <SID>ChangeWholeTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>d', ':call <SID>Delete()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>D', ':call <SID>DeleteSection()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>e', ':call <SID>EndTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>]', ':call <SID>DelComment()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>}', ':call <SID>DelCommentSection()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>f', ':call <SID>FoldTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>F', ':call <SID>FoldTagAll()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>g', ':call <SID>FormatTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>G', ':call <SID>FormatTagAll()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>I', ':call <SID>IndentAll()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>j', ':call <SID>Join()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>O', ':call <SID>BeforeTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>=', ':call <SID>CommentTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>o', ':call <SID>AfterTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>s', ':call <SID>StartTag()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>[', ':call <SID>DelCData()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>{', ':call <SID>DelCDataSection()<Cr>')
-call <SID>mapKey('n', '<LocalLeader>>', ':call <SID>ShiftRight()<Cr>')
-call <SID>mapKey('n', '<LocalLeader><', ':call <SID>ShiftLeft()<Cr>')
-call <SID>mapKey('v', '<LocalLeader>l', '<Esc>:call <SID>vlistitem()<Cr>')
-call <SID>mapKey('v', '<LocalLeader>v', '<Esc>:call <SID>BlockTag(0)<Cr>')
-call <SID>mapKey('v', '<LocalLeader>V', '<Esc>:call <SID>BlockTag(1)<Cr>')
-call <SID>mapKey('v', '<LocalLeader>c', '<Esc>:call <SID>BlockWith("<![CDATA[","]]>")<Cr>')
-call <SID>mapKey('v', '<LocalLeader><', '<Esc>:call <SID>BlockWith("<!--","-->")<Cr>')
+  " Mappings of keys to functions                                         {{{2
+  call <SID>mapKey('n', '<LocalLeader>5', ':call <SID>Matches()<Cr>')
+  call <SID>mapKey('v', '<LocalLeader>5', '<Esc>:call <SID>MatchesVisual()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>%', ':call <SID>Matches()<Cr>')
+  call <SID>mapKey('v', '<LocalLeader>%', '<Esc>:call <SID>MatchesVisual()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>c', ':call <SID>Change()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>C', ':call <SID>ChangeWholeTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>d', ':call <SID>Delete()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>D', ':call <SID>DeleteSection()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>e', ':call <SID>EndTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>]', ':call <SID>DelComment()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>}', ':call <SID>DelCommentSection()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>f', ':call <SID>FoldTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>F', ':call <SID>FoldTagAll()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>g', ':call <SID>FormatTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>G', ':call <SID>FormatTagAll()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>I', ':call <SID>IndentAll()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>j', ':call <SID>Join()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>O', ':call <SID>BeforeTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>=', ':call <SID>CommentTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>o', ':call <SID>AfterTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>s', ':call <SID>StartTag()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>[', ':call <SID>DelCData()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>{', ':call <SID>DelCDataSection()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader>>', ':call <SID>ShiftRight()<Cr>')
+  call <SID>mapKey('n', '<LocalLeader><', ':call <SID>ShiftLeft()<Cr>')
+  call <SID>mapKey('v', '<LocalLeader>l', '<Esc>:call <SID>vlistitem()<Cr>')
+  call <SID>mapKey('v', '<LocalLeader>v', '<Esc>:call <SID>BlockTag(0)<Cr>')
+  call <SID>mapKey('v', '<LocalLeader>V', '<Esc>:call <SID>BlockTag(1)<Cr>')
+  call <SID>mapKey('v', '<LocalLeader>c', '<Esc>:call <SID>BlockWith("<![CDATA[","]]>")<Cr>')
+  call <SID>mapKey('v', '<LocalLeader><', '<Esc>:call <SID>BlockWith("<!--","-->")<Cr>')
 
-" Move around functions.
-call <SID>mapKey('n', '[[', "m':call <SID>findOpenTag('bW')<CR>")
-call <SID>mapKey('n', ']]', "m':call <SID>findOpenTag('W')<CR>")
-call <SID>mapKey('n', '[]', "m':call <SID>findCloseTag('bW')<CR>")
-call <SID>mapKey('n', '][', "m':call <SID>findCloseTag('W')<CR>")
+  " Move around functions                                                 {{{2
+  call <SID>mapKey('n', '[[', "m':call <SID>findOpenTag('bW')<CR>")
+  call <SID>mapKey('n', ']]', "m':call <SID>findOpenTag('W')<CR>")
+  call <SID>mapKey('n', '[]', "m':call <SID>findCloseTag('bW')<CR>")
+  call <SID>mapKey('n', '][', "m':call <SID>findCloseTag('W')<CR>")
 
-" Move around comments
-call <SID>mapKey('n', ']"', substitute(':call search("^\(\s*<!--.*\n\)\@<!\(\s*-->\)", "W")<CR>', '"', "'", 'g'))
-call <SID>mapKey('n', '["', substitute(':call search("\%(^\s*<!--.*\n\)\%(^\s*-->\)\@!", "bW")<CR>', '"', "'", 'g'))
+  " Move around comments                                                  {{{2
+  call <SID>mapKey('n', ']"', substitute(':call search("^\(\s*<!--.*\n\)\@<!\(\s*-->\)", "W")<CR>', '"', "'", 'g'))
+  call <SID>mapKey('n', '["', substitute(':call search("\%(^\s*<!--.*\n\)\%(^\s*-->\)\@!", "bW")<CR>', '"', "'", 'g'))
 
-setlocal iskeyword=@,48-57,_,192-255,58  
-exe 'inoremap <silent> <buffer> '.b:suffix. " ><Esc>db:call <SID>makeElement()<Cr>"
-if !exists("g:xml_tag_completion_map")
-    inoremap <silent> <buffer> > ><Esc>:call <SID>CloseTagFun()<Cr>
-else
-    execute "inoremap <silent> <buffer> " . g:xml_tag_completion_map . " ><Esc>:call <SID>CloseTagFun()<Cr>"
-endif
+  " insert mode shortcuts                                                 {{{2
+  call <SID>mapKey('i', b:suffix, ' ><Esc>db:call <SID>makeElement()<Cr>')
+  if !exists("g:xml_tag_completion_map")
+    call <SID>mapKey('i', '>', ' ><Esc>:call <SID>CloseTagFun()<Cr>')
+  else
+    call <SID>mapKey('i', g:xml_tag_completion_map, ' ><Esc>:call <SID>CloseTagFun()<Cr>')
+  endif
 
-
+" finish                                                                  {{{1
 
 finish
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""/*}}}*/
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""/*}}}*/
+
 " Section: Documentation content                                          {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 === START_DOC
