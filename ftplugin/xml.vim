@@ -52,6 +52,10 @@ if exists("loaded_matchit")
      \  '<\@<=\%([^ \t>/]\+\)\%(\s\+[^/>]*\|$\):/>'
 endif
 
+function! s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfunction
+
 " Script rgular expresion used. Documents those nasty criters      {{{1
 let s:NoSlashBeforeGt = '\(\/\)\@\<!>'
 " Don't check for quotes around attributes!!!
@@ -79,8 +83,13 @@ elseif &filetype == 'xhtml'
 	let b:xml_use_xhtml = 1
 en
 
+if ! exists("b:xmlPluginMappedKeys")
+  let b:xmlPluginMappedKeys = []
+endif
+
 let b:undo_ftplugin = "setlocal cms< isk<"
   \ . "| unlet b:match_ignorecase b:match_words"
+  \ . "| call <SNR>" . s:SID() . "_unmapKeys()"
 
 
 
@@ -1200,7 +1209,7 @@ function! s:mapKey(mode, key, cmd)
     execute a:mode . "noremap <silent> <buffer> " .
           \ a:key . " " .
           \ a:cmd
-    let s:mapped_keys += [[a:mode, a:key]]
+    let b:xmlPluginMappedKeys += [[a:mode, a:key]]
 
   elseif exists("g:xml_warn_on_duplicate_mapping")
         \ && g:xml_warn_on_duplicate_mapping
@@ -1215,10 +1224,10 @@ endfunction
 
 " unmapKeys()                         {{{1
 function! s:unmapKeys()
-  for mapped in s:mapped_keys
+  for mapped in b:xmlPluginMappedKeys
     execute mapped[0] . "unmap <buffer> " . mapped[1]
   endfor
-  let s:mapped_keys = []
+  let b:xmlPluginMappedKeys = []
 endfunction
 
 " Menu options: {{{1
@@ -1423,9 +1432,6 @@ endif
 
 
 " Mappings                                                                {{{1
-if ! exists("s:mapped_keys")
-  let s:mapped_keys = []
-endif
 
 call s:unmapKeys()
 
