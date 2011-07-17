@@ -1199,6 +1199,8 @@ function! s:mapKey(mode, key, cmd)
     execute a:mode . "noremap <silent> <buffer> " .
           \ a:key . " " .
           \ a:cmd
+    let s:mapped_keys += [[a:mode, a:key]]
+
   elseif exists("g:xml_warn_on_duplicate_mapping")
         \ && g:xml_warn_on_duplicate_mapping
 
@@ -1208,6 +1210,14 @@ function! s:mapKey(mode, key, cmd)
           \ " in mode " . a:mode
     echohl WarningMsg | echomsg s:duplicate_mapping_msg | echohl None
   endif
+endfunction
+
+" unmapKeys()                         {{{1
+function! s:unmapKeys()
+  for mapped in s:mapped_keys
+    execute mapped[0] . "unmap <buffer> " . mapped[1]
+  endfor
+  let s:mapped_keys = []
 endfunction
 
 " Menu options: {{{1
@@ -1412,6 +1422,12 @@ endif
 
 
 " Mappings of keys to functions                                      {{{1
+if ! exists("s:mapped_keys")
+  let s:mapped_keys = []
+endif
+
+call s:unmapKeys()
+
 call <SID>mapKey('n', '<LocalLeader>5', ':call <SID>Matches()<Cr>')
 call <SID>mapKey('v', '<LocalLeader>5', '<Esc>:call <SID>MatchesVisual()<Cr>')
 call <SID>mapKey('n', '<LocalLeader>%', ':call <SID>Matches()<Cr>')
